@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 public class MQConfig {
 
@@ -18,6 +21,22 @@ public class MQConfig {
     public static final String BACKUP_QUEUE = "backup.queue";
     // 警告
     public static final String WARNING_QUEUE = "warning.queue";
+
+    // 优先级队列
+    public static final String PRIORITY_QUEUE = "priority.queue";
+
+    /**
+     * 优先级队列、消息生产者设置优先级，0-20
+     * 消息放入队列后，消费者再进行消费
+     *
+     * @return priorityQueue
+     */
+    @Bean(value = "priorityQueue")
+    public Queue priorityQueue() {
+        Map<String, Object> arguments = new HashMap<>();
+        arguments.put("x-max-priority", 20);
+        return QueueBuilder.durable(PRIORITY_QUEUE).withArguments(arguments).build();
+    }
 
     @Bean(value = "confirmQueue")
     public Queue confirmQueue() {
