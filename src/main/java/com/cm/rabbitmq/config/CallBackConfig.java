@@ -25,7 +25,9 @@ public class CallBackConfig implements RabbitTemplate.ConfirmCallback, RabbitTem
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String s) {
         if (ack) {
-            log.info("ID:{}", correlationData.getId());
+            if (correlationData != null) {
+                log.info("ID:{}", correlationData.getId());
+            }
         } else {
             ReturnedMessage message = correlationData.getReturned();
             log.info("message:{}，错误原因：{}，交换机：{}，键：{}",

@@ -24,6 +24,8 @@ public class MQConfig {
 
     // 优先级队列
     public static final String PRIORITY_QUEUE = "priority.queue";
+    public static final String PRIORITY_EXCHANGE = "priority.exchange";
+    public static final String PRIORITY_ROUTING_KEY = "priority.routing.key";
 
     /**
      * 优先级队列、消息生产者设置优先级，0-20
@@ -37,6 +39,19 @@ public class MQConfig {
         arguments.put("x-max-priority", 20);
         return QueueBuilder.durable(PRIORITY_QUEUE).withArguments(arguments).build();
     }
+
+    @Bean(value = "priorityExchange")
+    public DirectExchange priorityExchange() {
+         DirectExchange confirmExchange = new DirectExchange(PRIORITY_EXCHANGE);
+        return confirmExchange;
+    }
+
+    @Bean(value = "confirmQueueBindConfirmExchange")
+    public Binding priorityQueueBindPriorityExchange(@Qualifier(value = "priorityQueue") Queue queue,
+                                                   @Qualifier(value = "priorityExchange") DirectExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(PRIORITY_ROUTING_KEY);
+    }
+
 
     @Bean(value = "confirmQueue")
     public Queue confirmQueue() {
