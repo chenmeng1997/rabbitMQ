@@ -20,4 +20,9 @@ class RabbitMqDemoApplicationTests {
         providerService.sendMsg();
     }
 
+    @Test
+    void sendTopicMsg() {
+        providerService.sendTopicMsg();
+    }
+
 }

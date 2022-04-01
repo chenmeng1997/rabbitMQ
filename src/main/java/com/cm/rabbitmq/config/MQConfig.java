@@ -27,6 +27,28 @@ public class MQConfig {
     public static final String PRIORITY_EXCHANGE = "priority.exchange";
     public static final String PRIORITY_ROUTING_KEY = "priority.routing.key";
 
+    // 发布订阅
+    public static final String TOPIC_QUEUE = "topic.queue";
+    public static final String TOPIC_EXCHANGE = "topic.exchange";
+    public static final String TOPIC_ROUTING_KEY = "topic.routing.#";
+
+    @Bean(value = "topicQueue")
+    public Queue topicQueue() {
+        return QueueBuilder.durable(TOPIC_QUEUE).build();
+    }
+
+    @Bean(value = "topicExchange")
+    public TopicExchange topicExchange() {
+        TopicExchange topicExchange = new TopicExchange(TOPIC_EXCHANGE);
+        return topicExchange;
+    }
+
+    @Bean(value = "topicQueueBindTopicExchange")
+    public Binding topicQueueBindTopicExchange(@Qualifier(value = "topicQueue") Queue queue,
+                                                     @Qualifier(value = "topicExchange") TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(TOPIC_ROUTING_KEY);
+    }
+
     /**
      * 优先级队列、消息生产者设置优先级，0-20
      * 消息放入队列后，消费者再进行消费
