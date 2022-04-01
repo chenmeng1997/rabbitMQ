@@ -27,10 +27,43 @@ public class MQConfig {
     public static final String PRIORITY_EXCHANGE = "priority.exchange";
     public static final String PRIORITY_ROUTING_KEY = "priority.routing.key";
 
-    // 发布订阅
+    // 主题
     public static final String TOPIC_QUEUE = "topic.queue";
     public static final String TOPIC_EXCHANGE = "topic.exchange";
     public static final String TOPIC_ROUTING_KEY = "topic.routing.#";
+
+    // 发布订阅
+    public static final String FANOUT_QUEUE_1 = "fanout.queue.one";
+    public static final String FANOUT_QUEUE_2 = "fanout.queue.two";
+    public static final String FANOUT_EXCHANGE = "fanout.exchange";
+
+    @Bean(value = "fanoutQueueOne")
+    public Queue fanoutQueueOne() {
+        return QueueBuilder.durable(FANOUT_QUEUE_1).build();
+    }
+
+    @Bean(value = "fanoutQueueTwo")
+    public Queue fanoutQueueTwo() {
+        return QueueBuilder.durable(FANOUT_QUEUE_2).build();
+    }
+
+    @Bean(value = "fanoutExchange")
+    public FanoutExchange fanoutExchange() {
+        FanoutExchange fanoutExchange = new FanoutExchange(FANOUT_EXCHANGE);
+        return fanoutExchange;
+    }
+
+    @Bean(value = "fanoutQueueOneQueueBindFanoutExchange")
+    public Binding fanoutQueueOneQueueBindFanoutExchange(@Qualifier(value = "fanoutQueueOne") Queue queue,
+                                                         @Qualifier(value = "fanoutExchange") FanoutExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange);
+    }
+
+    @Bean(value = "fanoutQueueTwoQueueBindFanoutExchange")
+    public Binding fanoutQueueTwoQueueBindFanoutExchange(@Qualifier(value = "fanoutQueueTwo") Queue queue,
+                                                         @Qualifier(value = "fanoutExchange") FanoutExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange);
+    }
 
     @Bean(value = "topicQueue")
     public Queue topicQueue() {

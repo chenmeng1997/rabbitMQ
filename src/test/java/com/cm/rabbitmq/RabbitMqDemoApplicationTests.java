@@ -25,4 +25,9 @@ class RabbitMqDemoApplicationTests {
         providerService.sendTopicMsg();
     }
 
+    @Test
+    void sendFanoutMsg() {
+        providerService.sendFanoutMsg();
+    }
+
 }

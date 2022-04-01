@@ -31,7 +31,12 @@ public class ProviderService {
 
         String routingKey = "topic.routing.hello";
         // String topicExchange = MQConfig.TOPIC_EXCHANGE;
-        rabbitTemplate.convertAndSend(topicExchange, routingKey, "你好！");
+        rabbitTemplate.convertAndSend(topicExchange, routingKey, "你好！" + topicExchange);
+    }
+
+    public void sendFanoutMsg() {
+        String fanoutExchange = MQConfig.FANOUT_EXCHANGE;
+        rabbitTemplate.convertAndSend(fanoutExchange, null, "你好！" + MQConfig.FANOUT_EXCHANGE);
     }
 
 }

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConsumerServiceCopy {
 
-    @RabbitListener(queues = MQConfig.PRIORITY_QUEUE)
-    public void process(String testMessage) {
-        log.info("ConsumerService消费者收到消息:{}", testMessage);
+    @RabbitListener(queues = MQConfig.FANOUT_QUEUE_2)
+    public void processFanout(String testMessage) {
+        String fanoutQueue = MQConfig.FANOUT_QUEUE_2;
+        log.info("ConsumerServiceCopy.processFanout 队列：{}, 消息:{}", fanoutQueue, testMessage);
     }
+
 }

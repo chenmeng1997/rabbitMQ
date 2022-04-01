@@ -16,7 +16,14 @@ public class ConsumerService {
 
     @RabbitListener(queues = MQConfig.TOPIC_QUEUE)
     public void processTopic(String testMessage) {
-        log.info("ConsumerService.processTopic消费者收到消息:{}", testMessage);
+        String fanoutQueue = MQConfig.TOPIC_QUEUE;
+        log.info("ConsumerService.processTopic 队列：{}, 消息:{}", fanoutQueue, testMessage);
+    }
+
+    @RabbitListener(queues = MQConfig.FANOUT_QUEUE_1)
+    public void processFanout(String testMessage) {
+        String fanoutQueue = MQConfig.FANOUT_QUEUE_1;
+        log.info("ConsumerService.processFanout 队列：{}, 消息:{}", fanoutQueue, testMessage);
     }
 
 }
