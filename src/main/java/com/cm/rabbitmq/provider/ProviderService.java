@@ -26,11 +26,11 @@ public class ProviderService {
     }
 
     public void sendTopicMsg() {
-        String routingKey = "topic.routing1.hello";
-        // String topicExchange = MQConfig.TOPIC_EXCHANGE + "99";
+        // String routingKey = "topic.routing1.hello";
+        String topicExchange = MQConfig.TOPIC_EXCHANGE + "99";
 
-        // String routingKey = "topic.routing.hello";
-        String topicExchange = MQConfig.TOPIC_EXCHANGE;
+        String routingKey = "topic.routing.hello";
+        // String topicExchange = MQConfig.TOPIC_EXCHANGE;
         rabbitTemplate.convertAndSend(topicExchange, routingKey, "你好！");
     }
 

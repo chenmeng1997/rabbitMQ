@@ -29,12 +29,14 @@ public class CallBackConfig implements RabbitTemplate.ConfirmCallback, RabbitTem
                 log.info("ID:{}", correlationData.getId());
             }
         } else {
-            ReturnedMessage message = correlationData.getReturned();
-            log.info("message:{}，错误原因：{}，交换机：{}，键：{}",
-                    new String(message.getMessage().getBody()),
-                    message.getReplyText(),
-                    message.getExchange(),
-                    message.getRoutingKey());
+            if (correlationData != null) {
+                ReturnedMessage message = correlationData.getReturned();
+                log.info("message:{}，错误原因：{}，交换机：{}，键：{}",
+                        new String(message.getMessage().getBody()),
+                        message.getReplyText(),
+                        message.getExchange(),
+                        message.getRoutingKey());
+            }
         }
     }
 
