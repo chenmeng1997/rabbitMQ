@@ -10,9 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class RabbitMqDemoApplicationTests {
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
     private ProviderService providerService;
 
     @Test
