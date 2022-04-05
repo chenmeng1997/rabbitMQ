@@ -21,10 +21,10 @@ public class ProviderService {
      * 直接交换机、优先队列
      */
     public void sendPriorityMsg(String message, Integer priority) {
-        // String exchange = MQConfig.PRIORITY_EXCHANGE;
-        String exchange = MQConfig.PRIORITY_EXCHANGE + 1; // 确认回调测试
-        String routingKey = MQConfig.PRIORITY_ROUTING_KEY;
-        // String routingKey = MQConfig.PRIORITY_ROUTING_KEY +1; // returnedMessage 测试
+        String exchange = MQConfig.PRIORITY_EXCHANGE;
+        // String exchange = MQConfig.PRIORITY_EXCHANGE + 1; // 确认回调测试
+        // String routingKey = MQConfig.PRIORITY_ROUTING_KEY;
+        String routingKey = MQConfig.PRIORITY_ROUTING_KEY + 1; // returnedMessage 测试
         CorrelationData correlationDat = new CorrelationData();
         ReturnedMessage returned = new ReturnedMessage(new Message(message.getBytes(StandardCharsets.UTF_8)), 400, "错误", exchange, routingKey);
         correlationDat.setReturned(returned);

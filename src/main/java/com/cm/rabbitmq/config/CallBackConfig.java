@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @Log4j2
 @Configuration
@@ -37,19 +38,17 @@ public class CallBackConfig implements RabbitTemplate.ConfirmCallback, RabbitTem
      */
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String s) {
+        Objects.requireNonNull(correlationData, "correlationData 为空！");
         if (ack) {
-            if (correlationData != null) {
-                log.info("ID:{}", correlationData.getId());
-            }
+            log.info("ID:{}", correlationData.getId());
         } else {
-            if (correlationData != null) {
-                ReturnedMessage message = correlationData.getReturned();
-                log.info("message:{}，错误原因：{}，交换机：{}，键：{}",
-                        new String(message.getMessage().getBody()),
-                        message.getReplyText(),
-                        message.getExchange(),
-                        message.getRoutingKey());
-            }
+            ReturnedMessage message = correlationData.getReturned();
+            Objects.requireNonNull(message, "ReturnedMessage 为空！");
+            log.info("message:{}，错误原因：{}，交换机：{}，键：{}",
+                    new String(message.getMessage().getBody()),
+                    message.getReplyText(),
+                    message.getExchange(),
+                    message.getRoutingKey());
         }
     }
 
@@ -60,6 +59,7 @@ public class CallBackConfig implements RabbitTemplate.ConfirmCallback, RabbitTem
      */
     @Override
     public void returnedMessage(ReturnedMessage returnedMessage) {
+        Objects.requireNonNull(returnedMessage, "ReturnedMessage 为空！");
         log.error("message:{}，错误原因：{}，交换机：{}，键：{}",
                 new String(returnedMessage.getMessage().getBody(), StandardCharsets.UTF_8),
                 returnedMessage.getReplyText(),
