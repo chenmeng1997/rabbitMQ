@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 
 @Log4j2
 @Configuration
@@ -27,6 +28,13 @@ public class CallBackConfig implements RabbitTemplate.ConfirmCallback, RabbitTem
         rabbitTemplate.setReturnsCallback(this);
     }
 
+    /**
+     * 确认消息发到交换机
+     *
+     * @param correlationData 相关数据
+     * @param ack             确认
+     * @param s               可选原因，用于 nack，如果可用，否则为 null。
+     */
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String s) {
         if (ack) {
@@ -45,10 +53,15 @@ public class CallBackConfig implements RabbitTemplate.ConfirmCallback, RabbitTem
         }
     }
 
+    /**
+     * 确认消息到队列
+     *
+     * @param returnedMessage 返回消息
+     */
     @Override
     public void returnedMessage(ReturnedMessage returnedMessage) {
         log.error("message:{}，错误原因：{}，交换机：{}，键：{}",
-                new String(returnedMessage.getMessage().getBody()),
+                new String(returnedMessage.getMessage().getBody(), StandardCharsets.UTF_8),
                 returnedMessage.getReplyText(),
                 returnedMessage.getExchange(),
                 returnedMessage.getRoutingKey());

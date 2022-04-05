@@ -1,30 +1,17 @@
 package com.cm.rabbitmq;
 
-import com.cm.rabbitmq.provider.ProviderService;
 import org.junit.jupiter.api.Test;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
+@RunWith(SpringRunner.class)
 class RabbitMqDemoApplicationTests {
-
-    @Autowired
-    private ProviderService providerService;
 
     @Test
     void contextLoads() {
-        providerService.sendMsg();
-    }
 
-    @Test
-    void sendTopicMsg() {
-        providerService.sendTopicMsg();
-    }
-
-    @Test
-    void sendFanoutMsg() {
-        providerService.sendFanoutMsg();
     }
 
 }
