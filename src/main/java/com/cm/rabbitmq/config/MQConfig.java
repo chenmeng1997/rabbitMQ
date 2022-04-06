@@ -182,6 +182,7 @@ public class MQConfig {
         factory.setReceiveTimeout(2000L);
         //设置重试间隔
         factory.setFailedDeclarationRetryInterval(3000L);
+//        factory.setRetryTemplate();
         //监听自定义格式转换
         factory.setMessageConverter(new Jackson2JsonMessageConverter());
         return factory;
