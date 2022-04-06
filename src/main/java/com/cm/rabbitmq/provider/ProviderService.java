@@ -1,9 +1,13 @@
 package com.cm.rabbitmq.provider;
 
 import com.cm.rabbitmq.config.MQConfig;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.core.ReturnedMessage;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.core.ChannelCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +39,8 @@ public class ProviderService {
                 message,
                 messagePostProcessor -> {
                     messagePostProcessor.getMessageProperties().setPriority(priority);
+                    messagePostProcessor.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                    messagePostProcessor.getMessageProperties().setRedelivered(Boolean.TRUE);
                     return messagePostProcessor;
                 },
                 correlationDat
@@ -54,5 +60,16 @@ public class ProviderService {
         String fanoutExchange = MQConfig.FANOUT_EXCHANGE;
         rabbitTemplate.convertAndSend(fanoutExchange, null, "你好！" + MQConfig.FANOUT_EXCHANGE);
     }
+
+    public void getMessageCount() {
+
+        String queueName = "direct.screenshot.queue";
+
+        AMQP.Queue.DeclareOk declareOk = rabbitTemplate.execute(channel -> channel.queueDeclarePassive(queueName));
+        int messageCount = declareOk.getMessageCount();
+
+
+    }
+
 
 }

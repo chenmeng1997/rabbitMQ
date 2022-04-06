@@ -78,7 +78,7 @@ public class MQConfig {
 
     @Bean(value = "topicQueueBindTopicExchange")
     public Binding topicQueueBindTopicExchange(@Qualifier(value = "topicQueue") Queue queue,
-                                                     @Qualifier(value = "topicExchange") TopicExchange exchange) {
+                                               @Qualifier(value = "topicExchange") TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(TOPIC_ROUTING_KEY);
     }
 
@@ -92,18 +92,19 @@ public class MQConfig {
     public Queue priorityQueue() {
         Map<String, Object> arguments = new HashMap<>();
         arguments.put("x-max-priority", 20);
+        // arguments.put("x-max-length", 6);
         return QueueBuilder.durable(PRIORITY_QUEUE).withArguments(arguments).build();
     }
 
     @Bean(value = "priorityExchange")
     public DirectExchange priorityExchange() {
-         DirectExchange confirmExchange = new DirectExchange(PRIORITY_EXCHANGE);
+        DirectExchange confirmExchange = new DirectExchange(PRIORITY_EXCHANGE);
         return confirmExchange;
     }
 
     @Bean(value = "confirmQueueBindConfirmExchange")
     public Binding priorityQueueBindPriorityExchange(@Qualifier(value = "priorityQueue") Queue queue,
-                                                   @Qualifier(value = "priorityExchange") DirectExchange exchange) {
+                                                     @Qualifier(value = "priorityExchange") DirectExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(PRIORITY_ROUTING_KEY);
     }
 
@@ -119,7 +120,9 @@ public class MQConfig {
         // 绑定备份交换机
         DirectExchange confirmExchange = ExchangeBuilder
                 .directExchange(CONFIRM_EXCHANGE)
-                .withArgument("alternate", BACKUP_EXCHANGE)
+                .durable(Boolean.TRUE) // 持久化
+                .withArgument("alternate", BACKUP_EXCHANGE) // 备份交换机
+                // .alternate(BACKUP_EXCHANGE)
                 .build();
         return confirmExchange;
     }
