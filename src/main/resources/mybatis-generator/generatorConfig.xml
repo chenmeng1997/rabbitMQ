@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--导入属性配置 -->
+    <properties resource="mybatis-generator/generatorConfig.properties"></properties>
+    <!--配置要链接的数据库的数据源 ORCAL -->
+    <!--    <classPathEntry location="${jdbc.driverLocation}"/>-->
+
+    <!---Mybatis上下文-->
+    <context id="MySqlContext" targetRuntime="MyBatis3">
+        <!-- optional，旨在创建class时，对注释进行控制 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--jdbc的数据库连接 -->
+        <jdbcConnection driverClass="${jdbc.driverClass}"
+                        connectionURL="${jdbc.connectionURL}"
+                        userId="${jdbc.userId}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+
+        <!--数据库BigDecimals字段在java中定义-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!--实体类生成信息-->
+        <javaModelGenerator targetPackage="${targetPackage.domain}" targetProject="${targetProject}">
+            <!-- 是否对model添加 构造函数 -->
+            <property name="constructorBased" value="true"/>
+            <!--是否允许子包-->
+            <!--<property name="enableSubPackages" value="true"/>-->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 -->
+            <property name="immutable" value="false"/>
+            <!-- 是否对类CHAR类型的列的数据进行trim操作-->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--mybatis 的xml文件地址-->
+        <sqlMapGenerator targetPackage="${targetPackage.mapper.xml}" targetProject="${targetProject}">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--mybatis的mapper接口-->
+        <javaClientGenerator targetPackage="${targetPackage.mapper}" targetProject="${targetProject}" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--要生成的表结构 ORACLE-->
+        <!-- <table tableName="YYGH_HZXX_TRIPARTITE"
+                domainObjectName="YyghHzxxTripartiteDo"
+                enableCountByExample="false"
+                enableUpdateByExample="false"
+                enableDeleteByExample="false"
+                enableSelectByExample="false"
+                selectByExampleQueryId="false">
+             <generatedKey column="ID" sqlStatement="select SEQ_YYGH_HZXX_TRIPARTITE_ID.nextval from dual" type="pre"/>
+         </table>-->
+
+        <!--要生成的表结构 MySQL-->
+
+        <!--<table schema="server" tableName="pawj_safety_elevator_accident_alarm" domainObjectName="ElevatorAccidentAlarmDo"-->
+        <table tableName="sys_user" domainObjectName="UserDo"
+               enableCountByExample="false" enableDeleteByExample="false" enableDeleteByPrimaryKey="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false">
+            <generatedKey column="id" sqlStatement="select last_insert_id()" type="post" identity="true"/>
+        </table>
+
+    </context>
+
+</generatorConfiguration>
